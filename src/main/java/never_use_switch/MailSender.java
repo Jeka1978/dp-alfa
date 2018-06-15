@@ -1,23 +1,44 @@
 package never_use_switch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 /**
  * @author Evgeny Borisov
  */
 public class MailSender {
-
+    private final static Logger LOG = LoggerFactory.getLogger(MailSender.class);
 
 
     public void sendMail() {
+
+
         MailInfo mailInfo = DBUtils.getMailInfo();
-        switch (mailInfo.getMailCode()) {
-            case 1:
-                // 60 lines of code which will generate and send welcome mail
-                System.out.println("Welcome mail was sent");
-                break;
-            case 2:
-                // 90 lines of code
-                System.out.println("mail: don't call us, we call you was sent");
-                break;
-        }
+        String html = MailType.findByMailCode(mailInfo.getMailCode()).getMailGenerator().generateHtml();
+        send(html);
+    }
+
+    private void send(String html) {
+        System.out.println("sending... "+html);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
