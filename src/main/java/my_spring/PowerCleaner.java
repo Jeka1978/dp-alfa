@@ -5,7 +5,8 @@ import javax.annotation.PostConstruct;
 /**
  * @author Evgeny Borisov
  */
-public class PowerCleaner implements Cleaner {
+@Benchmark
+public final class PowerCleaner implements Cleaner {
 
     @InjectRandomInt(min=3, max = 6)
     private int repeat;

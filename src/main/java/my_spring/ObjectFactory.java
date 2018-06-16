@@ -3,12 +3,10 @@ package my_spring;
 import lombok.SneakyThrows;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
+import org.springframework.cglib.proxy.Enhancer;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,6 +20,7 @@ public class ObjectFactory {
     private Config config = new JavaConfig();
     private Reflections scanner = new Reflections("my_spring");
     private List<ObjectConfigurator> configurators = new ArrayList<>();
+    private List<ProxyConfigurator> proxyConfigurators = new ArrayList<>();
 
 
 
@@ -37,6 +36,12 @@ public class ObjectFactory {
                 configurators.add(aClass.newInstance());
             }
         }
+        Set<Class<? extends ProxyConfigurator>> set = scanner.getSubTypesOf(ProxyConfigurator.class);
+        for (Class<? extends ProxyConfigurator> aClass : set) {
+            if (!Modifier.isAbstract(aClass.getModifiers())) {
+                proxyConfigurators.add(aClass.newInstance());
+            }
+        }
     }
 
 
@@ -46,10 +51,17 @@ public class ObjectFactory {
         T t = type.newInstance();
         configure(t);
         invokeInit(type, t);
-
+        t = wrapWithPoxyIfNeeded(type, t);
         return t;
 
 
+    }
+
+    private <T> T wrapWithPoxyIfNeeded(Class<T> type, T t) {
+        for (ProxyConfigurator proxyConfigurator : proxyConfigurators) {
+            t = (T) proxyConfigurator.wrapWithProxy(t, type);
+        }
+        return t;
     }
 
     private <T> void invokeInit(Class<T> type, T t) throws IllegalAccessException, InvocationTargetException {
