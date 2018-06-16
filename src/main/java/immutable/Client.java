@@ -1,21 +1,25 @@
 package immutable;
 
+import lombok.*;
 import lombok.experimental.Wither;
+
+import java.util.Map;
 
 /**
  * @author Evgeny Borisov
  */
 @Wither
+@Builder
+@Value
 public class Client {
     private final String name;
     private final int age;
-    private final int bonus;
-    private final int debt;
+    @NonNull
+    private final Integer bonus;
+    private  int debt=200;
+    @Singular
+    private Map<String,Integer> beers;
+    @Singular("oneFish")
+    private Map<String,Integer> fish;
 
-    public Client(String name, int age, int bonus, int debt) {
-        this.name = name;
-        this.age = age;
-        this.bonus = bonus;
-        this.debt = debt;
-    }
 }

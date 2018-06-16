@@ -11,7 +11,7 @@ public class Main {
         for (int i = 0; i<10; i++) {
             products.add(Repository.getProduct());
         }
-//        int sum = Calculator.calcAll(products);
-//        System.out.println("sum = " + sum);
+        int sum = Calculator.calcAll(products);
+        System.out.println("sum = " + sum);
     }
 }
