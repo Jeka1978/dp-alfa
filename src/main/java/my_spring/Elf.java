@@ -11,7 +11,6 @@ public class Elf {
     @InjectRandomInt(min = 12, max = 23)
     private int power;
     @InjectRandomInt(min = 28, max = 50)
-
     private int speed;
 
 
