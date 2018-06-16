@@ -4,7 +4,10 @@ import lombok.SneakyThrows;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +20,10 @@ import java.util.Set;
 public class ObjectFactory {
     private static ObjectFactory ourInstance = new ObjectFactory();
     private Config config = new JavaConfig();
-    private Reflections scanner = new Reflections("my_spring");
+    private Reflections scanner = new Reflections();
     private List<ObjectConfigurator> configurators = new ArrayList<>();
+
+
 
     public static ObjectFactory getInstance() {
         return ourInstance;
@@ -40,10 +45,19 @@ public class ObjectFactory {
         type = resolveImpl(type);
         T t = type.newInstance();
         configure(t);
-        //todo invoke init methods
+        invokeInit(type, t);
+
         return t;
 
 
+    }
+
+    private <T> void invokeInit(Class<T> type, T t) throws IllegalAccessException, InvocationTargetException {
+        Set<Method> methods = ReflectionUtils.getAllMethods(type, method -> method.isAnnotationPresent(PostConstruct.class));
+        for (Method method : methods) {
+            method.setAccessible(true);
+            method.invoke(t);
+        }
     }
 
     private <T> void configure(T t) {
