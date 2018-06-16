@@ -11,12 +11,21 @@ import lombok.experimental.Wither;
 @ToString(exclude = "age")
 @EqualsAndHashCode(exclude = "age")
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Wither
 public class Person {
-    private final String name;
-    private final int age;
-    private final int salary;
+    private String name;
+    private int age;
+    private int salary;
+
+    private void init() {
+        System.out.println("111111111111111111");
+    }
+
+    public void doX() {
+        System.out.println("xxxxxxxxxxxx");
+    }
 
 
 }

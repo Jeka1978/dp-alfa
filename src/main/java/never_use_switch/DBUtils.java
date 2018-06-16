@@ -11,7 +11,7 @@ public class DBUtils {
 
     public static MailInfo getMailInfo() {
         MailInfo mailInfo = new MailInfo();
-        mailInfo.setMailCode(random.nextInt(2)+1);
+        mailInfo.setMailCode(random.nextInt(3)+1);
         return mailInfo;
     }
 }

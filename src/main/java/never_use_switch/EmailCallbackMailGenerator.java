@@ -1,8 +1,11 @@
 package never_use_switch;
 
+import lombok.SneakyThrows;
+
 /**
  * @author Evgeny Borisov
  */
+@MailCode(2)
 public class EmailCallbackMailGenerator implements MailGenerator {
     @Override
     public String generateHtml() {

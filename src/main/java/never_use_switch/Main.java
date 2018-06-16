@@ -15,7 +15,11 @@ public class Main {
 
         MailSender mailSender = new MailSender();
         while (true) {
-            mailSender.sendMail();
+            try {
+                mailSender.sendMail();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             Thread.sleep(1000);
         }
     }
