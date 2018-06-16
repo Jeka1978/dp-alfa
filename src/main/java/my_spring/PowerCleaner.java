@@ -1,5 +1,7 @@
 package my_spring;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author Evgeny Borisov
  */
@@ -7,6 +9,11 @@ public class PowerCleaner implements Cleaner {
 
     @InjectRandomInt(min=3, max = 6)
     private int repeat;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("repeat = " + repeat);
+    }
 
     @Override
     public void clean() {
